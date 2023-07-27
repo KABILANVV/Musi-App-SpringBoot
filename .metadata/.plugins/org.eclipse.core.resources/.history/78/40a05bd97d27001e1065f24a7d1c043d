@@ -1,0 +1,132 @@
+package com.example.demo.Controller;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;	
+//import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.Entity.PlayList;
+import com.example.demo.Entity.Registration;
+import com.example.demo.Entity.Song;
+import com.example.demo.Entity.User;
+import com.example.demo.Service.LoginService;
+import com.example.demo.Service.PlaylistService;
+import com.example.demo.Service.Registry;
+//import com.example.demo.Service.songService;
+import com.example.demo.Service.songService;
+
+@RestController
+@CrossOrigin
+public class AllController {
+	@Autowired
+    private LoginService login;
+	
+	@Autowired
+    private Registry reg;
+
+	@Autowired
+	private PlaylistService playService;
+	
+	@Autowired
+	private songService songServ;
+	
+	//Registration class
+    @GetMapping("/show")
+    public List<Registration> getAllUser() {
+        return reg.getAllUsers();
+    }
+
+    @GetMapping("/get/{id}")
+    public Registration getAUserById(@PathVariable int id) {
+        return reg.getUserById(id);
+    }
+
+    @PostMapping("/add")
+    public String addUser(@RequestBody Registration register) {
+        return (reg.addUser(register)) ? "User added successfully" : "Failed to add User";
+    }
+
+    @PutMapping("/{id}")
+    public Registration updateUser(@PathVariable int id, @RequestBody Registration register) {
+        return reg.updateUser(id, register);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteAUser(@PathVariable int id) {
+        return (reg.deleteUser(id)) ? "User deleted successfully" : "Failed to delete User";
+    }
+    
+    
+    
+    //Users class
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return login.getAllUsers();
+    }
+    
+//    @GetMapping("/users/login")
+//    public boolean checkUser(@RequestParam String username,@RequestParam String password) {
+//        return login.checkPassword(username,password);
+//    }
+    
+    @GetMapping("/users/get/{id}")
+    public User getUserById(@PathVariable int id) {
+        return login.getUserById(id);
+    }
+
+    @PutMapping("/users/{id}")
+    private User updateUser(@PathVariable int id, @RequestBody User user) {
+        return login.updateUser(id, user);
+    }
+
+    @DeleteMapping("/users.delete/{id}")
+    public String deleteUser(@PathVariable int id) {
+        return (login.deleteUser(id)) ? "User deleted successfully" : "Failed to delete User";
+    }
+    
+    //Playlist class
+    
+    @GetMapping("/playlist")
+    public List<PlayList> getAllPlayList() {
+    	return playService.getAllPlayLists();
+    }
+    
+    @GetMapping("/playlist/{id}")
+    public PlayList getPlayListById(@PathVariable int id) {
+    	return playService.getPlayListById(id);
+    }
+    
+    @PostMapping("/playlist/add")
+    public String addPlayList(@RequestBody PlayList list) {
+    	return (playService.addPlaylist(list)) ? "Playlist added successfully" : "Failed to add Playlist";
+    }
+    
+    
+    //Song class
+    
+    @GetMapping("/songs")
+    public List<Song> getAllSongs() {
+    	return songServ.getAllSongs();
+    }
+    
+    @GetMapping("/song/{id}")
+    public Song getSongById(@PathVariable int id) {
+    	return songServ.getSongById(id);
+    }
+    
+    @PostMapping("/song/add")
+    public String addSong(@RequestBody Song song) {
+    	return (songServ.addSong(song)) ? "Song added successfully" : "Failed to add Song";
+    }
+
+    
+    
+}
